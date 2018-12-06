@@ -1,0 +1,50 @@
+#Homework1
+#Tarik Dahnoun
+
+import numpy as np
+import pylab
+
+def dV(v,t):
+    return -B*v-g
+
+def Euler(V_initial, tmin, tmax, nts, deriv):
+
+    # Set up time axis    
+    t = np.linspace(tmin, tmax, nts)   
+    dt = (tmax - tmin)/nts
+    
+    # Set up velocity and position arrays
+    v = np.zeros_like(t)
+    
+    # Set up initial conditions
+    v[0] = V_initial
+    
+    # Do the Euler solve
+    for it in np.arange(0,len(t)-1):
+        
+        v[it+1] = v[it] + deriv(v[it],t[it])*dt
+    
+    # Make a plot
+    pylab.plot(t,v,'.-',label=r"Euler, $\beta$="+"{}".format(B))
+    return t, v
+    
+g=9.8
+B=.5
+Vinitial = 100.0 # initial Velocity
+tinitial = 0.0 # initial time
+tfinal = 10.0 # final time
+nts = 20 # number of timesteps
+t,V_euler = Euler(Vinitial, tinitial, tfinal, nts, dV)
+print V_euler
+
+# plot_analytic()
+pylab.xlabel("Time [s]",fontsize=16)
+pylab.ylabel("Velocity [m/s]",fontsize=16)
+pylab.axhline(0,color='k',ls='--')
+pylab.xlim(left=0)
+pylab.title("Velocity with drag")
+pylab.show()
+
+pylab.legend(loc='lower left',fontsize=11)
+
+# pylab.savefig("/Users/kemper/Desktop/PY251/_Lesson 5 - ODEs/Euler_solution_drag.pdf")
